@@ -22,15 +22,18 @@ pipeline {
         sh 'curl 192.168.56.3:80'
       }
     }
-    stage('Push') {
-      steps {
-        script {
-          docker.withRegistry('http://192.168.96.2:5000') {
-            docker.image('my-image').push()
-          }
+      stage('Push') {
+            steps {
+                // Шаги сборки образа и публикации
+                script {
+                    docker.image('my-image:latest').tag('192.168.96.2:5000/my').push()
+                    docker.image('192.168.96.2:5000/my').push()
+                }
+
+                // Шаг проверки реестра
+                sh 'curl -X GET http://192.168.96.2:5000/v2/_catalog'
+            }
         }
-      }
-    }
     stage('clean') {
       steps {
           sh 'docker stop my-image'
