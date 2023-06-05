@@ -24,15 +24,11 @@ pipeline {
     }
       stage('Push') {
             steps {
-                // Шаги сборки образа и публикации
                 script {
-                    docker.image('my-image:latest').tag('192.168.96.2:5000/my').push()
-                    docker.image('192.168.96.2:5000/my').push()
+                   sh 'docker tag my-image:latest 192.168.96.2:5000/my'
+                   sh 'docker push 192.168.96.2:5000/my'
                 }
-
-                // Шаг проверки реестра
-                sh 'curl -X GET http://192.168.96.2:5000/v2/_catalog'
-            }
+                }
         }
     stage('clean') {
       steps {
