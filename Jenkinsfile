@@ -1,6 +1,6 @@
 pipeline {
   agent  {
-        label 'vagrant-vm'
+        label 'vagrant'
         }
   stages {
     stage('Build') {
